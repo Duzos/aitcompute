@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "aitcompute",
+  "version": "${version}",
+  "name": "AIT: Computed",
+  "description": "Adds CC: Tweaked support to AIT ",
+  "authors": [
+    "Duzo"
+  ],
+  "contact": {
+    "repo": "https://github.com/Duzos/aitcompute"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/aitcompute/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "mc.duzo.aitcompute.client.ComputedClient"
+    ],
+    "main": [
+      "mc.duzo.aitcompute.Computed"
+    ]
+  },
+  "mixins": [
+    "aitcompute.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
