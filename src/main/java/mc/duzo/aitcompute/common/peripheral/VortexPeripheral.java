@@ -123,6 +123,6 @@ public class VortexPeripheral implements IPeripheral {
 		}
 
 		AbsoluteBlockPos.Directed pos = ref.get().destination();
-		return convertDirectedToLua(pos);
+		return convertDirectedToLua(pos); //
 	}
 }
