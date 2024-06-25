@@ -36,7 +36,7 @@ jobs:
         uses: Duzos/discord-webhook-upload-action@cf895084ae59c8f8a1cd35d34692e7d13cb5b399
         with:
           url: ${{ secrets.WEBHOOK_URL }}
-#          file: 'build/libs/*'
+          file: 'build/libs/*'
           username: THE COMPUTER
           avatar: 'https://static.wikia.nocookie.net/minecraftstorymode/images/4/40/AD_PAMA_Smiley.png/revision/latest?cb=20170827210830'
           commit: '> :sparkles: [%MESSAGE%](<%LINK%>) by [%AUTHOR%](<%AUTHOR_LINK%>)'
