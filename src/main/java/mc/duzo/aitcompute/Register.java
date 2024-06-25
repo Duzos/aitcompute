@@ -52,7 +52,7 @@ public class Register {
 			return register(SERIALIZERS, name, entry);
 		}
 
-		public static void initialize() {
+		public static void initialize() { //
 
 		}
 	}
