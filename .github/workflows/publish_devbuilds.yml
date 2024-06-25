@@ -37,8 +37,8 @@ jobs:
         with:
           url: ${{ secrets.WEBHOOK_URL }}
           file: 'build/libs/*'
-          username: computer brain
-          avatar: 'https://imgix.ranker.com/user_node_img/50058/1001141628/original/d-photo-u1'
+          username: THE COMPUTER
+          avatar: 'https://static.wikia.nocookie.net/minecraftstorymode/images/4/40/AD_PAMA_Smiley.png/revision/latest?cb=20170827210830'
           commit: '> :sparkles: [%MESSAGE%](<%LINK%>) by [%AUTHOR%](<%AUTHOR_LINK%>)'
           message: |
             <:new1:1253371736510959636><:new2:1253371805734015006> New `AIT: Computed` dev build `#${{ github.run_number }}`:
