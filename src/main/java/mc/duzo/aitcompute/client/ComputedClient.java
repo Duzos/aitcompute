@@ -1,6 +1,5 @@
 package mc.duzo.aitcompute.client;
 
-import dan200.computercraft.api.ComputerCraftAPI;
 import dan200.computercraft.api.client.FabricComputerCraftAPIClient;
 import dan200.computercraft.api.client.turtle.RegisterTurtleUpgradeModeller;
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
@@ -19,7 +18,7 @@ public class ComputedClient implements ClientModInitializer {
 	}
 
 	private static void registerTurtleModellers(RegisterTurtleUpgradeModeller register) {
-		register.register(Register.UpgradeRegistry.VORTEX, TurtleUpgradeModeller.sided(
+		register.register(Register.TurtleUpgrades.VORTEX, TurtleUpgradeModeller.sided(
 				new Identifier(Computed.MOD_ID, "block/turtle_vortex_left"),
 				new Identifier(Computed.MOD_ID, "block/turtle_vortex_right")
 		));

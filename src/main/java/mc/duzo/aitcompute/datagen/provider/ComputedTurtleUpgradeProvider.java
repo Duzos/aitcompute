@@ -16,7 +16,7 @@ public class ComputedTurtleUpgradeProvider extends TurtleUpgradeDataProvider {
 
 	@Override
 	protected void addUpgrades(Consumer<Upgrade<TurtleUpgradeSerialiser<?>>> consumer) {
-		simpleWithCustomItem(id("vortex"), Register.UpgradeRegistry.VORTEX, Register.VORTEX_UPGRADE).add(consumer);
+		simpleWithCustomItem(id("vortex"), Register.TurtleUpgrades.VORTEX, Register.Items.VORTEX_UPGRADE).add(consumer);
 	}
 
 	private static Identifier id(String id) {
