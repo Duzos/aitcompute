@@ -1,5 +1,6 @@
 package mc.duzo.aitcompute;
 
+import loqor.ait.tardis.link.v2.TardisRef;
 import loqor.ait.tardis.wrapper.server.ServerTardis;
 import loqor.ait.tardis.wrapper.server.manager.ServerTardisManager;
 import net.fabricmc.api.ModInitializer;
@@ -55,5 +56,12 @@ public class Computed implements ModInitializer {
 	}
 	public static void executeOnTardis(String id, Consumer<ServerTardis> consumer) {
 		executeOnTardis(UUID.fromString(id), consumer);
+	}
+
+	public static TardisRef createRef(UUID id) {
+		return new TardisRef(id, uuid -> ServerTardisManager.getInstance().demandTardis(Computed.getServer().orElseThrow(), uuid));
+	}
+	public static TardisRef createRef(String id) {
+		return createRef(UUID.fromString(id));
 	}
 }

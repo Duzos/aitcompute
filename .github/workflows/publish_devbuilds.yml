@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Publish artifacts
+      - name: Send webhook message
         uses: Duzos/discord-webhook-upload-action@main
         with:
           url: ${{ secrets.WEBHOOK_URL }}
