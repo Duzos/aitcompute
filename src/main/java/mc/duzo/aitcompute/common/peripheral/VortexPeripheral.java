@@ -41,15 +41,23 @@ public class VortexPeripheral implements IPeripheral {
 		return this.turtle;
 	}
 
+	/**
+	 * Dematerialises a tardis
+	 * @param args string uuid, optional boolean to set autopilot
+	 */
 	@LuaFunction
 	public final void dematerialise(IArguments args) throws LuaException {
 		boolean autopilot = args.optBoolean(1).orElse(false);
 		Computed.executeOnTardis(args.getString(0), tardis -> tardis.getTravel().dematerialise(autopilot)); // isnt a happy chappy
 	}
 
+	/**
+	 * Materialises a tardis
+	 * @param uuid string uuid
+	 */
 	@LuaFunction
-	public final void materialise(IArguments args) throws LuaException {
-		Computed.executeOnTardis(args.getString(0), tardis -> tardis.getTravel().materialise());
+	public final void materialise(String uuid) throws LuaException {
+		Computed.executeOnTardis(uuid, tardis -> tardis.getTravel().materialise());
 	}
 
 	private static Direction directionFromId(int id) {
@@ -85,6 +93,11 @@ public class VortexPeripheral implements IPeripheral {
 		return new Object[]{pos.getX(), pos.getY(), pos.getZ(), pos.getDirection().getId(), pos.getDimension().getValue()};
 	}
 
+	/**
+	 * Gets the position of a tardis
+	 * @param id string uuid
+	 * @return an array of the form {X, Y, Z, Rotation, Dimension ID}
+	 */
 	@LuaFunction
 	public final Object[] getPosition(String id) {
 		Optional<ServerTardis> ref = Computed.findTardis(id);
@@ -97,6 +110,11 @@ public class VortexPeripheral implements IPeripheral {
 		return convertDirectedToLua(pos);
 	}
 
+	/**
+	 * Gets the destination of a tardis
+	 * @param id string uuid
+	 * @return an array of the form {X, Y, Z, Rotation, Dimension ID}
+	 */
 	@LuaFunction
 	public final Object[] getDestination(String id) {
 		Optional<ServerTardis> ref = Computed.findTardis(id);
@@ -109,6 +127,11 @@ public class VortexPeripheral implements IPeripheral {
 		return convertDirectedToLua(pos);
 	}
 
+	/**
+	 * Gets the flight speed of a tardis
+	 * @param id string uuid
+	 * @return the speed
+	 */
 	@LuaFunction
 	public final int getSpeed(String id) {
 		Optional<ServerTardis> ref = Computed.findTardis(id);
@@ -119,11 +142,22 @@ public class VortexPeripheral implements IPeripheral {
 
 		return ref.get().getTravel().getSpeed();
 	}
+
+	/**
+	 * Sets the speed of a tardis
+	 * @param id string uuid
+	 * @param speed integer speed
+	 */
 	@LuaFunction
 	public final void setSpeed(String id, int speed) {
 		Computed.executeOnTardis(id, tardis -> tardis.getTravel().setSpeed(MathHelper.clamp(speed, 0, tardis.getTravel().getMaxSpeed())));
 	}
 
+	/**
+	 * Progress of a flight
+	 * @param id string uuid
+	 * @return 0-100 percentage
+	 */
 	@LuaFunction
 	public final int getFlightProgress(String id) {
 		Optional<ServerTardis> ref = Computed.findTardis(id);
@@ -138,6 +172,12 @@ public class VortexPeripheral implements IPeripheral {
 	private static boolean isTardisDim(World world) {
 		return TardisUtil.getTardisDimension().getRegistryKey().equals(world.getRegistryKey());
 	}
+
+	/**
+	 * Finds tardis UUID from the current position of a turtle
+	 * turtle must be placed inside the interior of a tardis to return a valid result
+	 * @return string uuid, or empty if invalid
+	 */
 	@LuaFunction
 	public final String findTardisId() {
 		if (!isTardisDim(turtle.getLevel())) {
