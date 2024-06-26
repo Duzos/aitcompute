@@ -25,7 +25,7 @@ public class ComputedDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider((((output, registriesFuture) -> {
 			LanguageProvider provider = new LanguageProvider(output, LanguageType.EN_US);
 
-			provider.addTranslation(Register.Items.VORTEX_UPGRADE, "Vortex Upgrade");
+			// provider.addTranslation(Register.Items.VORTEX_UPGRADE, "Vortex Upgrade");
 			provider.addTranslation("upgrade.aitcompute.vortex.adjective", "Vortex");
 
 			return provider;

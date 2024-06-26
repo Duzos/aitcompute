@@ -30,7 +30,7 @@ public class Register {
 	}
 
 	public static class Items implements ItemRegistryContainer {
-		public static final Item VORTEX_UPGRADE = register("vortex_upgrade", new Item(new OwoItemSettings().group(AITMod.AIT_ITEM_GROUP).maxCount(1)));
+		// public static final Item VORTEX_UPGRADE = register("vortex_upgrade", new Item(new OwoItemSettings().group(AITMod.AIT_ITEM_GROUP).maxCount(1)));
 
 		public static <T extends Item> T register(String name, T entry) {
 			return Register.register(Registries.ITEM, name, entry);
