@@ -61,7 +61,8 @@ dependencies {
     modRuntimeOnly("cc.tweaked:cc-tweaked-${project.minecraft_version}-fabric:${project.cc_version}")
 
     // Adventures in Time
-    modImplementation('com.github.loqor:ait:main-SNAPSHOT')
+    // modImplementation('com.github.loqor:ait:main-SNAPSHOT') // latest snapshot of the AIT github, unstable
+    modImplementation("maven.modrinth:ait:${project.ait_version}") // last release of AIT, stable (?)
 
     // AIT Dependencies ( Copied )
     modImplementation "io.wispforest:owo-lib:${project.owo_version}"

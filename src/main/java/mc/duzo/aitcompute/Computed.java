@@ -1,12 +1,10 @@
 package mc.duzo.aitcompute;
 
-import loqor.ait.tardis.link.v2.TardisRef;
-import loqor.ait.tardis.wrapper.server.ServerTardis;
-import loqor.ait.tardis.wrapper.server.manager.ServerTardisManager;
+import mdteam.ait.tardis.wrapper.server.ServerTardis;
+import mdteam.ait.tardis.wrapper.server.manager.ServerTardisManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
@@ -52,16 +50,16 @@ public class Computed implements ModInitializer {
 	}
 
 	public static void executeOnTardis(UUID id, Consumer<ServerTardis> consumer) {
-		ServerTardisManager.getInstance().getTardis(getServer().orElseThrow(), id, consumer);
+		ServerTardisManager.getInstance().getTardis(id, consumer);
 	}
 	public static void executeOnTardis(String id, Consumer<ServerTardis> consumer) {
 		executeOnTardis(UUID.fromString(id), consumer);
 	}
 
-	public static TardisRef createRef(UUID id) {
-		return new TardisRef(id, uuid -> ServerTardisManager.getInstance().demandTardis(Computed.getServer().orElseThrow(), uuid));
+	public static Optional<ServerTardis> findTardis(UUID id) {
+		return Optional.ofNullable((ServerTardis) ServerTardisManager.getInstance().getTardis(id));
 	}
-	public static TardisRef createRef(String id) {
-		return createRef(UUID.fromString(id));
+	public static Optional<ServerTardis> findTardis(String id) {
+		return findTardis(UUID.fromString(id));
 	}
 }
