@@ -2,9 +2,9 @@ package mc.duzo.aitcompute.datagen.provider;
 
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider;
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;
+import loqor.ait.core.AITItems;
 import mc.duzo.aitcompute.Computed;
 import mc.duzo.aitcompute.Register;
-import mdteam.ait.core.AITItems;
 import net.minecraft.data.DataOutput;
 import net.minecraft.util.Identifier;
 
@@ -17,7 +17,7 @@ public class ComputedTurtleUpgradeProvider extends TurtleUpgradeDataProvider {
 
 	@Override
 	protected void addUpgrades(Consumer<Upgrade<TurtleUpgradeSerialiser<?>>> consumer) {
-		simpleWithCustomItem(id("vortex"), Register.TurtleUpgrades.VORTEX, AITItems.RIFT_SCANNER).add(consumer);
+		simpleWithCustomItem(id("vortex"), Register.TurtleUpgrades.VORTEX, AITItems.HAZANDRA).add(consumer);
 	}
 
 	private static Identifier id(String id) {

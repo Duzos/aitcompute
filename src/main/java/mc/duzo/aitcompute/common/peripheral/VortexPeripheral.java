@@ -1,23 +1,28 @@
 package mc.duzo.aitcompute.common.peripheral;
 
+import com.google.gson.JsonElement;
 import dan200.computercraft.api.lua.IArguments;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
-import mc.duzo.aitcompute.Computed;
-import mdteam.ait.tardis.Tardis;
-import mdteam.ait.tardis.util.AbsoluteBlockPos;
-import mdteam.ait.tardis.util.SerialDimension;
-import mdteam.ait.tardis.util.TardisUtil;
-import mdteam.ait.tardis.wrapper.server.ServerTardis;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import loqor.ait.core.AITItems;
+import loqor.ait.core.item.KeyItem;
+import loqor.ait.registry.impl.TardisComponentRegistry;
+import loqor.ait.tardis.Tardis;
+import loqor.ait.tardis.base.KeyedTardisComponent;
+import loqor.ait.tardis.base.TardisComponent;
+import loqor.ait.tardis.data.properties.Value;
+import loqor.ait.tardis.util.TardisUtil;
+import loqor.ait.tardis.wrapper.server.ServerTardis;
+import loqor.ait.tardis.wrapper.server.manager.ServerTardisManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import java.util.Optional;
+import java.util.UUID;
 
 public class VortexPeripheral implements IPeripheral {
 	private final ITurtleAccess turtle;
@@ -41,136 +46,20 @@ public class VortexPeripheral implements IPeripheral {
 		return this.turtle;
 	}
 
-	/**
-	 * Dematerialises a tardis
-	 * @param args string uuid, optional boolean to set autopilot
-	 */
-	@LuaFunction
-	public final void dematerialise(IArguments args) throws LuaException {
-		boolean autopilot = args.optBoolean(1).orElse(false);
-		Computed.executeOnTardis(args.getString(0), tardis -> tardis.getTravel().dematerialise(autopilot)); // isnt a happy chappy
-	}
-
-	/**
-	 * Materialises a tardis
-	 * @param uuid string uuid
-	 */
-	@LuaFunction
-	public final void materialise(String uuid) throws LuaException {
-		Computed.executeOnTardis(uuid, tardis -> tardis.getTravel().materialise());
-	}
-
-	private static Direction directionFromId(int id) {
-		Direction found = Direction.byId(id);
-
-		if (found == Direction.UP || found == Direction.DOWN) return Direction.NORTH;
-
-		return found;
-	}
-
-	/**
-	 * Sets the destination
-	 * @param args id, x, y, z, dir, dim
-	 */
-	@LuaFunction
-	public final void setDestination(IArguments args) throws LuaException {
-		String turtleDim = turtle.getLevel().getRegistryKey().getValue().toString();
-
-		AbsoluteBlockPos.Directed destination = new AbsoluteBlockPos.Directed(
-				new BlockPos(args.getInt(1), args.getInt(2), args.getInt(3)),
-				new SerialDimension(args.optString(5).orElse(turtleDim)),
-				directionFromId(args.getInt(4))
-		);
-
-		Computed.executeOnTardis(args.getString(0), tardis -> tardis.getTravel().setDestination(destination));
-	}
-
-	/**
-	 * @return an array of the form {X, Y, Z, Rotation, Dimension ID}
-	 */
-	private static Object[] convertDirectedToLua(AbsoluteBlockPos.Directed pos) {
-		// X, Y, Z, Rotation, Dimension ID
-		return new Object[]{pos.getX(), pos.getY(), pos.getZ(), pos.getDirection().getId(), pos.getDimension().getValue()};
-	}
-
-	/**
-	 * Gets the position of a tardis
-	 * @param id string uuid
-	 * @return an array of the form {X, Y, Z, Rotation, Dimension ID}
-	 */
-	@LuaFunction
-	public final Object[] getPosition(String id) {
-		Optional<ServerTardis> ref = Computed.findTardis(id);
-
-		if (ref.isEmpty()) {
-			return new Object[]{0, 0, 0, 0, ""};
-		}
-
-		AbsoluteBlockPos.Directed pos = ref.get().position();
-		return convertDirectedToLua(pos);
-	}
-
-	/**
-	 * Gets the destination of a tardis
-	 * @param id string uuid
-	 * @return an array of the form {X, Y, Z, Rotation, Dimension ID}
-	 */
-	@LuaFunction
-	public final Object[] getDestination(String id) {
-		Optional<ServerTardis> ref = Computed.findTardis(id);
-				
-		if (ref.isEmpty()) {
-			return new Object[]{0, 0, 0, 0, ""};
-		}
-
-		AbsoluteBlockPos.Directed pos = ref.get().destination();
-		return convertDirectedToLua(pos);
-	}
-
-	/**
-	 * Gets the flight speed of a tardis
-	 * @param id string uuid
-	 * @return the speed
-	 */
-	@LuaFunction
-	public final int getSpeed(String id) {
-		Optional<ServerTardis> ref = Computed.findTardis(id);
-
-		if (ref.isEmpty()) {
-			return -1;
-		}
-
-		return ref.get().getTravel().getSpeed();
-	}
-
-	/**
-	 * Sets the speed of a tardis
-	 * @param id string uuid
-	 * @param speed integer speed
-	 */
-	@LuaFunction
-	public final void setSpeed(String id, int speed) {
-		Computed.executeOnTardis(id, tardis -> tardis.getTravel().setSpeed(MathHelper.clamp(speed, 0, tardis.getTravel().getMaxSpeed())));
-	}
-
-	/**
-	 * Progress of a flight
-	 * @param id string uuid
-	 * @return 0-100 percentage
-	 */
-	@LuaFunction
-	public final int getFlightProgress(String id) {
-		Optional<ServerTardis> ref = Computed.findTardis(id);
-
-		if (ref.isEmpty()) {
-			return -1;
-		}
-
-		return ref.get().getHandlers().getFlight().getDurationAsPercentage();
-	}
-
 	private static boolean isTardisDim(World world) {
 		return TardisUtil.getTardisDimension().getRegistryKey().equals(world.getRegistryKey());
+	}
+	private boolean hasKey(int slot, UUID tardis) {
+		ItemStack stack = this.turtle.getInventory().getStack(slot);
+		if (!(stack.getItem() instanceof KeyItem)) return false;
+
+		if (stack.isOf(AITItems.SKELETON_KEY)) return true;
+
+		Tardis found = KeyItem.getTardis(this.turtle.getLevel(), tardis);
+		return tardis.equals(found.getUuid());
+	}
+	private Tardis getTardis(UUID tardis) {
+		return ServerTardisManager.getInstance().demandTardis(this.turtle.getLevel().getServer(), tardis);
 	}
 
 	/**
@@ -188,5 +77,71 @@ public class VortexPeripheral implements IPeripheral {
 		if (found == null) return "";
 
 		return found.getUuid().toString();
+	}
+
+	/**
+	 * Sets a property on a tardis
+	 * @param args tardis: str, component: str, value: str, data: str
+	 * @return success
+	 */
+	@LuaFunction
+	public final <T> boolean set(IArguments args) throws LuaException {
+		UUID tardisId = UUID.fromString(args.getString(0));
+		int slot = this.turtle.getSelectedSlot();
+		if (!hasKey(slot, tardisId)) return false;
+
+		Tardis tardis = getTardis(tardisId); // poo
+		TardisComponent.IdLike id = TardisComponentRegistry.getInstance().get(args.getString(1).toUpperCase());
+
+		if (!(tardis.handler(id) instanceof KeyedTardisComponent keyed)) return false;
+
+		String valueName = args.getString(2);
+		Value<T> value = keyed.getPropertyData().getExact(valueName);
+		Class<?> classOfT = value.getProperty().getType().getClazz();
+
+		T obj = (T) ServerTardisManager.getInstance().getFileGson().fromJson(args.getString(3), classOfT);
+
+		value.set(obj);
+
+		return true;
+	}
+
+	/**
+	 * Gets a property of a tardis
+	 * @param args tardis: str, component: str, value: str
+	 * @return the found property or empty string
+	 */
+	@LuaFunction
+	public final <T> String get(IArguments args) throws LuaException {
+		UUID tardisId = UUID.fromString(args.getString(0));
+		int slot = this.turtle.getSelectedSlot();
+		if (!hasKey(slot, tardisId)) return "";
+
+		Tardis tardis = getTardis(tardisId); // poo
+		TardisComponent.IdLike id = TardisComponentRegistry.getInstance().get(args.getString(1).toUpperCase());
+
+		if (!(tardis.handler(id) instanceof KeyedTardisComponent keyed)) return "";
+
+		String valueName = args.getString(2);
+		Value<T> value = keyed.getPropertyData().getExact(valueName);
+		T obj = value.get();
+
+		String json = ServerTardisManager.getInstance().getFileGson().toJson(obj);
+
+		return json;
+	}
+
+	/**
+	 * Updates the tardis' flight state
+	 * @param args tardis: str
+	 */
+	@LuaFunction
+	public final void tryFly(IArguments args) throws LuaException {
+		UUID tardisId = UUID.fromString(args.getString(0));
+		int slot = this.turtle.getSelectedSlot();
+		if (!hasKey(slot, tardisId)) return;
+
+		Tardis tardis = getTardis(tardisId);
+		tardis.travel().speed(tardis.travel().speed());
 	}
 }

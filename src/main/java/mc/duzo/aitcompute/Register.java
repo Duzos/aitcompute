@@ -1,10 +1,8 @@
 package mc.duzo.aitcompute;
 
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser;
-import io.wispforest.owo.itemgroup.OwoItemSettings;
 import io.wispforest.owo.registration.reflect.ItemRegistryContainer;
 import mc.duzo.aitcompute.common.upgrade.TurtleVortex;
-import mdteam.ait.AITMod;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;

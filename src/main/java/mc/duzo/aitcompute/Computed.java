@@ -1,7 +1,5 @@
 package mc.duzo.aitcompute;
 
-import mdteam.ait.tardis.wrapper.server.ServerTardis;
-import mdteam.ait.tardis.wrapper.server.manager.ServerTardisManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
@@ -47,19 +45,5 @@ public class Computed implements ModInitializer {
 
 	public static Optional<MinecraftServer> getServer() {
 		return Optional.ofNullable(SERVER);
-	}
-
-	public static void executeOnTardis(UUID id, Consumer<ServerTardis> consumer) {
-		ServerTardisManager.getInstance().getTardis(id, consumer);
-	}
-	public static void executeOnTardis(String id, Consumer<ServerTardis> consumer) {
-		executeOnTardis(UUID.fromString(id), consumer);
-	}
-
-	public static Optional<ServerTardis> findTardis(UUID id) {
-		return Optional.ofNullable((ServerTardis) ServerTardisManager.getInstance().getTardis(id));
-	}
-	public static Optional<ServerTardis> findTardis(String id) {
-		return findTardis(UUID.fromString(id));
 	}
 }

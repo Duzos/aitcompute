@@ -15,37 +15,6 @@ repositories {
         }
     }
     maven { url "https://maven.wispforest.io" }
-
-    maven {
-        name "Ladysnake Mods"
-        url "https://maven.ladysnake.org/releases"
-    }
-
-    maven {
-        url "https://jitpack.io"
-
-        metadataSources {
-            artifact() // Look directly for artifact
-        }
-    }
-
-    maven { url "https://maven.shedaniel.me/" }
-    maven { url "https://maven.terraformersmc.com/releases/" }
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-
-    maven {
-        url "https://cursemaven.com"
-        content { includeGroup "curse.maven" }
-
-        metadataSources {
-            artifact() // Look directly for artifact
-        }
-    }
-
-    maven {
-        name "Modrinth"
-        url "https://api.modrinth.com/maven"
-    }
 }
 
 dependencies {
@@ -61,34 +30,12 @@ dependencies {
     modRuntimeOnly("cc.tweaked:cc-tweaked-${project.minecraft_version}-fabric:${project.cc_version}")
 
     // Adventures in Time
-    // modImplementation('com.github.loqor:ait:main-SNAPSHOT') // latest snapshot of the AIT github, unstable
-    modImplementation("maven.modrinth:ait:${project.ait_version}") // last release of AIT, stable (?)
+    modImplementation files("libs/ait.jar")
 
-    // AIT Dependencies ( Copied )
+    // owolib
     modImplementation "io.wispforest:owo-lib:${project.owo_version}"
     annotationProcessor "io.wispforest:owo-lib:${project.owo_version}"
     include "io.wispforest:owo-sentinel:${project.owo_version}"
-
-    // change to modImplementation to play with ip, modCompileOnlyApi to not play with ip
-    modCompileOnlyApi("com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:${project.ip_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-
-    modCompileOnlyApi("com.github.iPortalTeam.ImmersivePortalsMod:q_misc_util:${project.ip_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-
-    modImplementation("com.github.qouteall:GravityChanger:${project.gravity_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-
-    modCompileOnlyApi("me.shedaniel.cloth:cloth-config-fabric:11.0.99") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-
-    modCompileOnlyApi "curse.maven:forge-config-api-port-fabric-547434:4583000"
-
-    modCompileOnlyApi "maven.modrinth:k9-mod:${project.k9_version}"
 }
 
 processResources {
