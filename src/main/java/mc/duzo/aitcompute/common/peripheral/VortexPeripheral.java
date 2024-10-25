@@ -1,27 +1,22 @@
 package mc.duzo.aitcompute.common.peripheral;
 
-import com.google.gson.JsonElement;
 import dan200.computercraft.api.lua.IArguments;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
+import loqor.ait.api.KeyedTardisComponent;
+import loqor.ait.api.TardisComponent;
 import loqor.ait.core.AITItems;
 import loqor.ait.core.item.KeyItem;
+import loqor.ait.core.tardis.Tardis;
+import loqor.ait.core.tardis.dim.TardisDimension;
+import loqor.ait.core.tardis.manager.ServerTardisManager;
+import loqor.ait.data.properties.Value;
 import loqor.ait.registry.impl.TardisComponentRegistry;
-import loqor.ait.tardis.Tardis;
-import loqor.ait.tardis.base.KeyedTardisComponent;
-import loqor.ait.tardis.base.TardisComponent;
-import loqor.ait.tardis.data.properties.Value;
-import loqor.ait.tardis.util.TardisUtil;
-import loqor.ait.tardis.wrapper.server.ServerTardis;
-import loqor.ait.tardis.wrapper.server.manager.ServerTardisManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import java.util.Optional;
 import java.util.UUID;
 
 public class VortexPeripheral implements IPeripheral {
@@ -46,9 +41,6 @@ public class VortexPeripheral implements IPeripheral {
 		return this.turtle;
 	}
 
-	private static boolean isTardisDim(World world) {
-		return TardisUtil.getTardisDimension().getRegistryKey().equals(world.getRegistryKey());
-	}
 	private boolean hasKey(int slot, UUID tardis) {
 		ItemStack stack = this.turtle.getInventory().getStack(slot);
 		if (!(stack.getItem() instanceof KeyItem)) return false;
@@ -69,11 +61,7 @@ public class VortexPeripheral implements IPeripheral {
 	 */
 	@LuaFunction
 	public final String findTardisId() {
-		if (!isTardisDim(turtle.getLevel())) {
-			return "";
-		}
-
-		Tardis found = TardisUtil.findTardisByInterior(turtle.getPosition(), true);
+		Tardis found = TardisDimension.get(turtle.getLevel()).orElse(null);
 		if (found == null) return "";
 
 		return found.getUuid().toString();
